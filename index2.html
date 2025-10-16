@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Post-10th Career Roadmap</title>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+    :root {
+        --bg: #0b0b0d;
+        --card: #111;
+        --text: #f0f0f5;
+        --muted: #888;
+        --accent1: #00d4ff; /* Blue */
+        --accent2: #8b5cf6; /* Violet */
+        --accent3: #10b981; /* Green */
+        --accent4: #f59e0b; /* Amber */
+        --radius: 12px;
+        --line: #333;
+    }
+
+    body {
+        margin: 0;
+        font-family: 'Poppins', sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+    }
+
+    .wrap {
+        max-width: 1100px;
+        margin: 24px auto;
+        padding: 0 16px 48px;
+    }
+
+    h1 {
+        font-size: 2rem;
+        text-align: center;
+        margin-bottom: 32px;
+        background: linear-gradient(90deg, var(--accent1), var(--accent2));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        letter-spacing: 1px;
+    }
+
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 20px;
+    }
+
+    .card {
+        background: var(--card);
+        border-radius: var(--radius);
+        padding: 18px;
+        border: 1px solid #222;
+        box-shadow: 0 0 12px rgba(0,212,255,0.1);
+        transition: 0.3s;
+        display: flex;
+        flex-direction: column;
+    }
+    .card:hover { 
+        border-color: #333;
+        box-shadow: 0 0 18px rgba(0,212,255,0.25); 
+    }
+
+    .card h3 {
+        margin: 0 0 6px;
+        font-size: 1.2rem;
+        color: var(--accent1);
+    }
+    .small-muted {
+        font-size: 0.88rem;
+        color: var(--muted);
+    }
+
+    .accordion { margin-top: 12px; flex-grow: 1; display: flex; flex-direction: column; justify-content: flex-end; }
+    .acc-item { margin-bottom: 4px; }
+    .acc-button {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 12px;
+        background: #18181a;
+        border: 1px solid #2a2a2e;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        color: var(--text);
+        font-size: 0.95rem;
+        transition: background 0.2s, border-color 0.2s;
+    }
+    .acc-button:hover {
+        background: #1f1f22;
+        border-color: var(--accent2);
+    }
+    .acc-button.active {
+        background: var(--accent2);
+        color: #fff;
+        border-color: var(--accent2);
+        box-shadow: 0 2px 8px rgba(139, 90, 246, 0.4);
+    }
+    .acc-button span:last-child { 
+        transition: 0.3s;
+        font-size: 0.8rem;
+    }
+    .acc-button.active span:last-child { 
+        transform: rotate(180deg); 
+        font-weight: 900;
+    }
+
+    /* Dynamic roadmap container */
+    #dynamic-roadmap {
+        margin-top: 48px;
+        padding: 24px;
+        border-radius: var(--radius);
+        background: #18181a;
+        border: 1px solid var(--accent2);
+        box-shadow: 0 0 20px rgba(139, 90, 246, 0.2);
+        display: none;
+    }
+
+    .roadmap-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 20px;
+        color: var(--accent2);
+        text-align: center;
+        border-bottom: 2px solid var(--line);
+        padding-bottom: 10px;
+    }
+
+    .timeline-container {
+        overflow-x: auto;
+    }
+    .timeline {
+        position: relative;
+        display: flex;
+        gap: 60px;
+        padding: 24px 0 40px 0;
+        min-width: 800px;
+        width: max-content;
+    }
+
+    .track {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        height: 4px;
+        width: 100%;
+        background: var(--line);
+        border-radius: 999px;
+        transform: translateY(-50%);
+        z-index: 1;
+    }
+
+    .step {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        min-width: 180px;
+        z-index: 2;
+    }
+
+    .pin {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        box-shadow: 0 0 12px rgba(0,0,0,0.5);
+        transition: 0.3s;
+        margin-bottom: 8px; /* Added margin for separation */
+    }
+    .pin:hover { 
+        transform: scale(1.1); 
+        box-shadow: 0 0 24px rgba(255,255,255,0.4); 
+    }
+
+    .dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: var(--card);
+        border: 3px solid;
+        position: absolute;
+        top: calc(50% - 6px); /* Align dot on the track */
+        left: 50%; 
+        transform: translateX(-50%);
+        z-index: 3;
+    }
+
+    .step-title {
+        margin-top: 10px; /* Adjusted to be below the pin */
+        font-weight: 700;
+        font-size: 1rem;
+    }
+    .step-sub {
+        margin-top: 2px;
+        font-size: 0.8rem;
+        color: var(--muted);
+    }
+    .step:nth-child(odd) .pin { 
+        order: 1; 
+        margin-bottom: 40px;
+    }
+    .step:nth-child(even) .pin { 
+        order: 3; 
+        margin-top: 40px;
+    }
+    .step:nth-child(odd) .step-title, 
+    .step:nth-child(odd) .step-sub { 
+        order: 2; 
+    }
+    .step:nth-child(even) .step-title, 
+    .step:nth-child(even) .step-sub { 
+        order: 4; 
+    }
+    .step .dot { top: 50%; transform: translate(-50%, -50%); }
+
+    footer {
+        text-align: center;
+        color: var(--muted);
+        font-size: 0.9rem;
+        margin-top: 48px;
+    }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+    <h1>Career Roadmap After 10th</h1>
+
+    <div class="grid">
+
+        <!-- Intermediate Card -->
+        <div class="card">
+            <h3>Intermediate (10+2)</h3>
+            <p class="small-muted">Select an academic stream to view the full roadmap to university degrees.</p>
+            <div class="accordion">
+                <div class="acc-item">
+                    <button class="acc-button" data-acc="mpc"><span>MPC — Maths/Physics/Chemistry</span><span>▼</span></button>
+                </div>
+                <div class="acc-item">
+                    <button class="acc-button" data-acc="bipc"><span>BiPC — Biology/Physics/Chemistry</span><span>▼</span></button>
+                </div>
+                <div class="acc-item">
+                    <button class="acc-button" data-acc="cec"><span>CEC / Commerce</span><span>▼</span></button>
+                </div>
+                <div class="acc-item">
+                    <button class="acc-button" data-acc="hec"><span>HEC / Humanities</span><span>▼</span></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Polytechnic Card -->
+        <div class="card">
+            <h3>Polytechnic (Diploma)</h3>
+            <p class="small-muted">3-year diploma programs — leads to technician roles or lateral entry to B.Tech.</p>
+            <div class="accordion">
+                <div class="acc-item">
+                    <button class="acc-button" data-acc="poly"><span>View Diploma Roadmap</span><span>▼</span></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ITI Card -->
+        <div class="card">
+            <h3>ITI (Industrial Training Institute)</h3>
+            <p class="small-muted">Short trades (6 months–2 years) focused on specific, job-ready skills.</p>
+            <div class="accordion">
+                <div class="acc-item">
+                    <button class="acc-button" data-acc="iti"><span>View ITI Roadmap</span><span>▼</span></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Vocational Card -->
+        <div class="card">
+            <h3>Vocational / Short-term Courses</h3>
+            <p class="small-muted">Courses like Web Dev, Animation, Hospitality, Beauty, etc., for fast entry.</p>
+            <div class="accordion">
+                <div class="acc-item">
+                    <button class="acc-button" data-acc="voc"><span>View Vocational Path</span><span>▼</span></button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Dynamic roadmap container -->
+    <div id="dynamic-roadmap"></div>
+
+    <footer>
+        © 2025 CareerMap — Roadmap overview. Check specific requirements with colleges/boards.
+    </footer>
+</div>
+
+<script>
+    const roadmaps = {
+        mpc: `<div class="roadmap-title">Roadmap: MPC (Maths, Physics, Chemistry)</div>
+        <div class="timeline-container"><div class="timeline"><div class="track"></div>
+            <div class="step"><div class="pin" style="background:var(--accent1)">1</div><div class="dot" style="border-color:var(--accent1)"></div><div class="step-title">Intermediate (MPC)</div><div class="step-sub">Foundation for PCM</div></div>
+            <div class="step"><div class="pin" style="background:#8b5cf6">2</div><div class="dot" style="border-color:#8b5cf6"></div><div class="step-title">Entrance Exam (JEE, BITSAT)</div><div class="step-sub">Competitive Testing</div></div>
+            <div class="step"><div class="pin" style="background:#06b6d4">3</div><div class="dot" style="border-color:#06b6d4"></div><div class="step-title">UG (B.Tech / B.Arch / B.Sc)</div><div class="step-sub">Engineering & Architecture</div></div>
+            <div class="step"><div class="pin" style="background:#7c3aed">4</div><div class="dot" style="border-color:#7c3aed"></div><div class="step-title">PG / Specialization</div><div class="step-sub">M.Tech, MBA, M.Sc</div></div>
+            <div class="step"><div class="pin" style="background:#00d4ff">5</div><div class="dot" style="border-color:#00d4ff"></div><div class="step-title">Career</div><div class="step-sub">Software Dev, Core Engineer, Data Scientist</div></div>
+        </div></div><p class="small-muted mt-4"><strong>Notes:</strong> This path is highly competitive and usually leads to technical or research careers.</p>`,
+
+        bipc: `<div class="roadmap-title">Roadmap: BiPC (Biology, Physics, Chemistry)</div>
+        <div class="timeline-container"><div class="timeline"><div class="track"></div>
+            <div class="step"><div class="pin" style="background:#ef4444">1</div><div class="dot" style="border-color:#ef4444"></div><div class="step-title">Intermediate (BiPC)</div><div class="step-sub">PCB foundation</div></div>
+            <div class="step"><div class="pin" style="background:#fb923c">2</div><div class="dot" style="border-color:#fb923c"></div><div class="step-title">Entrance Exam (NEET)</div><div class="step-sub">Medical/Paramedical Test</div></div>
+            <div class="step"><div class="pin" style="background:#06b6d4">3</div><div class="dot" style="border-color:#06b6d4"></div><div class="step-title">UG (MBBS / BDS / B.Pharm)</div><div class="step-sub">Medical & Allied Health</div></div>
+            <div class="step"><div class="pin" style="background:#7c3aed">4</div><div class="dot" style="border-color:#7c3aed"></div><div class="step-title">PG / Practice</div><div class="step-sub">MD, MS, Specialization</div></div>
+            <div class="step"><div class="pin" style="background:#ef4444">5</div><div class="dot" style="border-color:#ef4444"></div><div class="step-title">Career</div><div class="step-sub">Doctor, Surgeon, Researcher, Dentist</div></div>
+        </div></div><p class="small-muted mt-4"><strong>Notes:</strong> NEET is mandatory for MBBS/BDS. Other options include B.Sc. in allied health sciences.</p>`,
+
+        cec: `<div class="roadmap-title">Roadmap: CEC / Commerce (Civics, Economics, Commerce)</div>
+        <div class="timeline-container"><div class="timeline"><div class="track"></div>
+            <div class="step"><div class="pin" style="background:#0ea5e9">1</div><div class="dot" style="border-color:#0ea5e9"></div><div class="step-title">Intermediate (CEC)</div><div class="step-sub">Accounting & Finance Basics</div></div>
+            <div class="step"><div class="pin" style="background:#06b6d4">2</div><div class="dot" style="border-color:#06b6d4"></div><div class="step-title">UG (B.Com / BBA / BBM)</div><div class="step-sub">Undergraduate Degree</div></div>
+            <div class="step"><div class="pin" style="background:#f59e0b">3</div><div class="dot" style="border-color:#f59e0b"></div><div class="step-title">Professional Course</div><div class="step-sub">CA, CS, ICWA, CFA</div></div>
+            <div class="step"><div class="pin" style="background:#8b5cf6">4</div><div class="dot" style="border-color:#8b5cf6"></div><div class="step-title">PG / Management</div><div class="step-sub">MBA (CAT/GMAT) or M.Com</div></div>
+            <div class="step"><div class="pin" style="background:#0ea5e9">5</div><div class="dot" style="border-color:#0ea5e9"></div><div class="step-title">Career</div><div class="step-sub">Financial Analyst, Auditor, HR Manager</div></div>
+        </div></div><p class="small-muted mt-4"><strong>Notes:</strong> Focus on professional certifications (CA/MBA) for high-growth careers.</p>`,
+        
+        hec: `<div class="roadmap-title">Roadmap: HEC / Humanities (History, Economics, Civics/Arts)</div>
+        <div class="timeline-container"><div class="timeline"><div class="track"></div>
+            <div class="step"><div class="pin" style="background:#a855f7">1</div><div class="dot" style="border-color:#a855f7"></div><div class="step-title">Intermediate (HEC)</div><div class="step-sub">Liberal Arts Foundation</div></div>
+            <div class="step"><div class="pin" style="background:#ec4899">2</div><div class="dot" style="border-color:#ec4899"></div><div class="step-title">UG (BA / BSW / B.Des / BA LLB)</div><div class="step-sub">Social Science & Law</div></div>
+            <div class="step"><div class="pin" style="background:#06b6d4">3</div><div class="dot" style="border-color:#06b6d4"></div><div class="step-title">Post-Graduation / Civil Services</div><div class="step-sub">MA, UPSC/State PSC Prep</div></div>
+            <div class="step"><div class="pin" style="background:#f59e0b">4</div><div class="dot" style="border-color:#f59e0b"></div><div class="step-title">Specialized Skill</div><div class="step-sub">Journalism, Counseling, Editing</div></div>
+            <div class="step"><div class="pin" style="background:#a855f7">5</div><div class="dot" style="border-color:#a855f7"></div><div class="step-title">Career</div><div class="step-sub">Lawyer, Educator, Civil Servant, Content Creator</div></div>
+        </div></div><p class="small-muted mt-4"><strong>Notes:</strong> This path offers flexibility for public service, law, media, and design fields.</p>`,
+
+        poly: `<div class="roadmap-title">Roadmap: Polytechnic / Diploma</div>
+        <div class="timeline-container"><div class="timeline"><div class="track"></div>
+            <div class="step"><div class="pin" style="background:var(--accent3)">1</div><div class="dot" style="border-color:var(--accent3)"></div><div class="step-title">3-Year Diploma</div><div class="step-sub">Mechanical, Civil, Electrical, CS</div></div>
+            <div class="step"><div class="pin" style="background:#06b6d4">2</div><div class="dot" style="border-color:#06b6d4"></div><div class="step-title">Job Entry</div><div class="step-sub">Junior Engineer (JE), Technician</div></div>
+            <div class="step"><div class="pin" style="background:#8b5cf6">3</div><div class="dot" style="border-color:#8b5cf6"></div><div class="step-title">Lateral Entry to B.Tech (2nd Year)</div><div class="step-sub">Acquire Full Engineering Degree</div></div>
+            <div class="step"><div class="pin" style="background:#f59e0b">4</div><div class="dot" style="border-color:#f59e0b"></div><div class="step-title">Experience / Certification</div><div class="step-sub">PMP, AutoCAD Expert</div></div>
+            <div class="step"><div class="pin" style="background:var(--accent3)">5</div><div class="dot" style="border-color:var(--accent3)"></div><div class="step-title">Career Growth</div><div class="step-sub">Site Manager, Senior Engineer, Entrepreneur</div></div>
+        </div></div><p class="small-muted mt-4"><strong>Notes:</strong> This route provides fast employment with options for vertical growth later on.</p>`,
+
+        iti: `<div class="roadmap-title">Roadmap: ITI (Industrial Training Institute)</div>
+        <div class="timeline-container"><div class="timeline"><div class="track"></div>
+            <div class="step"><div class="pin" style="background:var(--accent4)">1</div><div class="dot" style="border-color:var(--accent4)"></div><div class="step-title">ITI Course (6 months - 2 years)</div><div class="step-sub">Fitter, Welder, Electrician</div></div>
+            <div class="step"><div class="pin" style="background:#f97316">2</div><div class="dot" style="border-color:#f97316"></div><div class="step-title">Apprenticeship / Job Placement</div><div class="step-sub">Direct hands-on experience</div></div>
+            <div class="step"><div class="pin" style="background:#10b981">3</div><div class="dot" style="border-color:#10b981"></div><div class="step-title">Advanced Trade Certificate</div><div class="step-sub">Skill Upgrading</div></div>
+            <div class="step"><div class="pin" style="background:#8b5cf6">4</div><div class="dot" style="border-color:#8b5cf6"></div><div class="step-title">Supervisor / Foreman Role</div><div class="step-sub">Management of teams</div></div>
+            <div class="step"><div class="pin" style="background:var(--accent4)">5</div><div class="dot" style="border-color:var(--accent4)"></div><div class="step-title">Career</div><div class="step-sub">Master Craftsman, Technical Trainer, Small Business Owner</div></div>
+        </div></div><p class="small-muted mt-4"><strong>Notes:</strong> Fastest path to employment, focused on practical, high-demand industry skills.</p>`,
+
+        voc: `<div class="roadmap-title">Roadmap: Vocational / Short-term Courses</div>
+        <div class="timeline-container"><div class="timeline"><div class="track"></div>
+            <div class="step"><div class="pin" style="background:#ec4899">1</div><div class="dot" style="border-color:#ec4899"></div><div class="step-title">Short Course Certification</div><div class="step-sub">Web Development, Animation, Digital Marketing</div></div>
+            <div class="step"><div class="pin" style="background:#f97316">2</div><div class="dot" style="border-color:#f97316"></div><div class="step-title">Entry-Level Job / Freelance</div><div class="step-sub">Immediate income generation</div></div>
+            <div class="step"><div class="pin" style="background:#06b6d4">3</div><div class="dot" style="border-color:#06b6d4"></div><div class="step-title">Portfolio Building / Advanced Cert</div><div class="step-sub">Establish Expertise</div></div>
+            <div class="step"><div class="pin" style="background:#a855f7">4</div><div class="dot" style="border-color:#a855f7"></div><div class="step-title">Specialist / Entrepreneur</div><div class="step-sub">Founding a company or consulting</div></div>
+            <div class="step"><div class="pin" style="background:#ec4899">5</div><div class="dot" style="border-color:#ec4899"></div><div class="step-title">Career</div><div class="step-sub">UX Designer, Media Artist, Hospitality Manager</div></div>
+        </div></div><p class="small-muted mt-4"><strong>Notes:</strong> Focus is on niche, modern skills; continuous learning is essential for growth.</p>`,
+    };
+
+    const roadmapContainer = document.getElementById('dynamic-roadmap');
+    const accButtons = document.querySelectorAll('.acc-button');
+    let activeRoadmap = null;
+
+    accButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const roadmapKey = button.getAttribute('data-acc');
+            
+            // Check if the currently active roadmap is being clicked again
+            if (activeRoadmap === roadmapKey) {
+                // If so, hide the container and reset state
+                roadmapContainer.style.display = 'none';
+                button.classList.remove('active');
+                activeRoadmap = null;
+                return;
+            }
+
+            // Deactivate all buttons
+            accButtons.forEach(btn => btn.classList.remove('active'));
+
+            // Activate the clicked button
+            button.classList.add('active');
+
+            // Set new active roadmap key
+            activeRoadmap = roadmapKey;
+
+            // Update content and display container
+            if (roadmaps[roadmapKey]) {
+                roadmapContainer.innerHTML = roadmaps[roadmapKey];
+                roadmapContainer.style.display = 'block';
+            } else {
+                roadmapContainer.innerHTML = `<p class="text-center text-red-500">Error: Roadmap not found for key: ${roadmapKey}</p>`;
+                roadmapContainer.style.display = 'block';
+            }
+        });
+    });
+</script>
+</body>
+</html>

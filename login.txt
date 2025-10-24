@@ -1,0 +1,10 @@
+
+C:\Users\Dell\Desktop\madhu>git checkout develop
+branch 'develop' set up to track 'origin/develop'.
+Switched to a new branch 'develop'
+
+C:\Users\Dell\Desktop\madhu>git branch 
+* develop
+  main
+
+C:\Users\Dell\Desktop\madhu>
